@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <title>Weather Card</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="radio-input">
+        <label class="label">
+            <input class="btn-radio" name="value-radio" id="playButton" type="radio" />
+            <span class="text">Play</span>
+        </label>
+        <label class="label">
+            <input class="btn-radio" name="value-radio" id="pauseButton" type="radio" />
+            <span class="text">Pause</span>
+        </label>
+
+        <input type="checkbox" id="checkboxInput">
+        <label for="checkboxInput" class="toggleSwitch">
+            <!-- Icono de altavoz -->
+            <div class="speaker">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 75 75">
+                    <path d="M39.389,13.769 L22.235,28.606 L6,28.606 L6,47.699 L21.989,47.699 L39.389,62.75 L39.389,13.769z" style="stroke:#fff;stroke-width:5;stroke-linejoin:round;fill:#fff;"></path>
+                    <path d="M48,27.6a19.5,19.5 0 0 1 0,21.4M55.1,20.5a30,30 0 0 1 0,35.6M61.6,14a38.8,38.8 0 0 1 0,48.6" style="fill:none;stroke:#fff;stroke-width:5;stroke-linecap:round"></path>
+                </svg>
+            </div>
+
+            <!-- Icono de silencio -->
+            <div class="mute-speaker">
+                <svg version="1.0" viewBox="0 0 75 75" stroke="#fff" stroke-width="5">
+                    <path d="m39,14-17,15H6V48H22l17,15z" fill="#fff" stroke-linejoin="round"></path>
+                    <path d="m49,26 20,24m0-24-20,24" fill="#fff" stroke-linecap="round"></path>
+                </svg>
+            </div>
+        </label>
+    </div>
+</div>
+
+  <div class="container">
+    <div class="row">
+      <!-- Columna 1: Formulario -->
+      <div class="col-md-4">
+        <form class="form" onsubmit="buscarClima(); return false;">
+          <p id="heading">Clima / Direcciones</p>
+          <!-- Ciudad -->
+          <div class="field">
+            <svg viewBox="0 0 16 16" fill="currentColor" height="16" width="16" xmlns="http://www.w3.org/2000/svg" class="input-icon"></svg>
+            <input type="text" id="ubicacion" class="input-field" placeholder="Ciudad: Ej. Buenos Aires" autocomplete="off" onkeyup="mostrarCiudades()">
+          </div>
+
+          <!-- Dropdown para sugerencias de ciudades -->
+          <div id="myDropdown" class="dropdown-content"></div>
+
+
+          <!-- Latitud -->
+          <div class="field">
+            <svg viewBox="0 0 16 16" fill="currentColor" height="16" width="16" xmlns="http://www.w3.org/2000/svg" class="input-icon"></svg>
+            <input type="text" id="calle1" class="input-field" placeholder="Calle / Latitud: Ej. -34.608185" autocomplete="off">
+          </div>
+          <!-- Longitud -->
+          <div class="field">
+            <svg viewBox="0 0 16 16" fill="currentColor" height="16" width="16" xmlns="http://www.w3.org/2000/svg" class="input-icon"></svg>
+            <input type="text" id="calle2" class="input-field" placeholder="Altura / Longitud: Ej. -58.4235046" autocomplete="off">
+          </div>
+          <!-- Botones -->
+          <div class="btn">
+            <button type="submit" class="button1" onclick="buscarDireccion()">Buscar</button>
+            <button type="reset" class="button2">Borrar</button>
+          </div>
+          <button class="button3" onclick="obtenerUbicacionActual()">Obtener mi ubicación</button>
+        </form>
+      </div>
+
+      <!-- Columna 2: Resultados del clima -->
+      <div class="col-md-4">
+        <div class="card">
+          <section class="landscape-section">
+            <div class="sky"></div>
+            <div class="moon">
+              <div class="shine-1"></div>
+              <div class="shine-2"></div>
+              <div class="real-moon">
+                <div class="moon-shape"></div>
+              </div>
+            </div>
+            <div class="hill-1"></div>
+            <div class="hill-2"></div>
+            <div class="ocean">
+              <div class="reflection"></div>
+              <div class="reflection"></div>
+              <div class="reflection"></div>
+              <div class="reflection"></div>
+              <div class="reflection"></div>
+              <div class="shadow-hill-1"></div>
+              <div class="shadow-hill-2"></div>
+            </div>
+            <div class="hill-3"></div>
+            <div class="hill-4"></div>
+            <div class="tree-1"></div>
+            <div class="filter"></div>
+          </section>
+          <section class="content-section">
+            <div class="weather-info">
+              <div class="left-side">
+                <div class="icon" id="icono-clima">
+                  <!-- Aquí se actualizará el ícono dinámicamente -->
+                </div>
+                <p id="descripcion">Clima</p>
+              </div>
+              <div class="right-side">
+                <div class="location">
+                  <div>
+                    <svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64px" height="64px" viewBox="0 0 64 64" xml:space="preserve" fill="#ffffff" stroke="#ffffff">
+                      <path fill="#ffffff" d="M32,0C18.746,0,8,10.746,8,24c0,5.219,1.711,10.008,4.555,13.93c0.051,0.094,0.059,0.199,0.117,0.289l16,24C29.414,63.332,30.664,64,32,64s2.586-0.668,3.328-1.781l16-24c0.059-0.09,0.066-0.195,0.117-0.289C54.289,34.008,56,29.219,56,24C56,10.746,45.254,0,32,0z M32,32c-4.418,0-8-3.582-8-8s3.582-8,8-8s8,3.582,8,8S36.418,32,32,32z"></path>
+                    </svg>
+                    <span id="pais">País</span>
+                  </div>
+                </div>
+                <p id="fecha">Fecha</p>
+                <p class="temperature" id="temperatura">--°C</p>
+                <p class="temperature2" id="feels-like">--°C</p>
+              </div>
+            </div>
+            <div class="forecast">
+              <div>
+                <p>Máxima</p>
+                <p id="temp-max">--°C</p>
+              </div>
+              <div class="separator"></div>
+              <div>
+                <p>Mínima</p>
+                <p id="temp-min">--°C</p>
+              </div>
+              <div class="separator"></div>
+              <div>
+                <p>Humedad</p>
+                <p id="humedad">--%</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+     <!-- Columna 3: Resultados de la calle -->
+<div class="col-md-4">
+  <div class="text-center">
+    <div class="card1">
+      <!-- Loader de clima -->
+      <div id="clima-loader"></div>
+      <!-- Contenedor con scroll -->
+      <div class="scrollable-content">
+        <!-- Resultado de la calle -->
+        <div id="resultado" class="text-secondary mt-3"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="/js/clima.js"></script>
+  <script src="/js/cruce.js"></script>
+  <script src="climaYDireccion.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+
+</html>
